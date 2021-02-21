@@ -1,0 +1,26 @@
+version: "2"
+services:
+  ganache-cli:
+    # container_name: ganache-cli
+    build: ganache-cli
+    restart: on-failure
+    ports:
+      - "8545:8545"
+    networks:
+      - nodeapp-network
+
+  truffleapp:
+    # container_name: truffleapp
+    build: .
+    command: bash -c "truffle migrate --network ganache && yarn start"
+    restart: on-failure
+    depends_on: 
+      - "ganache-cli"
+    ports:
+      - "3000:3000"
+    networks:
+      - nodeapp-network
+
+networks:
+  nodeapp-network:
+    driver: bridge
