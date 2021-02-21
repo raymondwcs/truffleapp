@@ -73,41 +73,9 @@ class App extends React.Component {
         this.updateEventHistory()
       })
     })
-    // Get accounts.
-    /*
-    this.state.web3.eth.getAccounts((error, accounts) => {
-      simpleStorage.deployed().then((instance) => {
-        simpleStorageInstance = instance
-
-        this.setState(prevState => ({
-          ...prevState,
-          accounts,
-          simpleStorageInstance
-        }));
-
-        // Stores a given value, 5 by default.
-        return simpleStorageInstance.set(5, { from: accounts[0] })
-      }).then((result) => {
-        // Get the value from the contract to prove it worked.
-        return simpleStorageInstance.get.call(accounts[0])
-      }).then((result) => {
-        // Update state with the result.
-        return this.setState(prevState => ({
-          ...prevState,
-          storageValue: result.c[0]
-        }))
-      })
-    })
-    */
   }
 
   updateEventHistory = async () => {
-    // const contract = require('@truffle/contract')
-    // const simpleStorage = contract(SimpleStorageContract)
-    // simpleStorage.setProvider(this.state.web3.currentProvider)
-
-    // simpleStorage.deployed().then((instance) => {
-    //   instance.getPastEvents('ValueChanged', { fromBlock: 0, toBlock: 'latest' }).then(events => {
     this.state.simpleStorageInstance.getPastEvents('ValueChanged', { fromBlock: 0, toBlock: 'latest' }).then(events => {
       console.log(JSON.stringify(events))
       let history = []
@@ -123,31 +91,6 @@ class App extends React.Component {
   }
 
   addToSimpleStorage = () => {
-    // const value = this.storageAmountInput.value;
-    // console.log('value to be stored is');
-    // console.log(value);
-
-    // const contract = require('@truffle/contract')
-    // const simpleStorage = contract(SimpleStorageContract)
-    // simpleStorage.setProvider(this.state.web3.currentProvider)
-
-    // Declaring this for later so we can chain functions on SimpleStorage.
-    // var simpleStorageInstance
-
-    // this.state.web3.eth.getAccounts((error, accounts) => {
-    //   simpleStorage.deployed().then((instance) => {
-    //     simpleStorageInstance = instance
-    //     return simpleStorageInstance.set(value, { from: accounts[0] })
-    //   }).then((results) => {
-    //     console.log(results)
-    //     return simpleStorageInstance.get()
-    //   }).then((results) => {
-    //     console.log(results.toNumber())
-    //     this.setState({ storageValue: results.toNumber() })
-    //     this.updateEventHistory()
-    //   })
-    // })
-
     if (this.state.simpleStorageInstance && this.state.accounts) {
       const value = this.storageAmountInput.value;
       console.log('value to be stored is');
@@ -171,7 +114,6 @@ class App extends React.Component {
         error: new Error('simple storage instance not loaded')
       }))
     }
-
   }
 
   render() {
