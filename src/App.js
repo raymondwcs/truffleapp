@@ -1,7 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import 'bootstrap/dist/css/bootstrap.css';
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+import Container from 'react-bootstrap/Container';
+
 // import logo from './logo.svg';
-import './App.css';
+// import './App.css';
 import getWeb3 from "./getWeb3";
 
 // const path = require('path');
@@ -122,39 +127,38 @@ class App extends React.Component {
     }
     return (
       <div className="App">
-        <h1>Good to Go!</h1>
-        <p>Your Truffle Box is installed and ready.</p>
-        <h2>Smart Contract Example</h2>
-        <p>
+        <h1 class="d-flex justify-content-center">Good to Go!</h1>
+        <p class="d-flex justify-content-center">Your Truffle Box is installed and ready.</p>
+        <h2 class="d-flex justify-content-center">Smart Contract Example</h2>
+        <p class="d-flex justify-content-center">
           If your contracts compiled and migrated successfully, below will show
           a stored value of 5 (by default).
         </p>
         {/* <p>
           Try changing the value stored on <strong>line 40</strong> of App.js.
         </p> */}
-        <div>The stored value is: {this.state.storageValue}</div>
-        <div>
-          <form className="pure-form pure-form-stacked">
-            <fieldset>
-              <label htmlFor="storage">Storage Amount</label>
-              <input id="storage" type="number" ref={c => { this.storageAmountInput = c }} />
-              <button
-                className="pure-button"
-                onClick={(e) => {
-                  e.preventDefault();
-                  this.addToSimpleStorage()
-                }}
-              >
-                Set Storage
-            </button>
-            </fieldset>
-          </form>
+        <div class="d-flex justify-content-center">The stored value is: {this.state.storageValue}</div>
+        <div class="d-flex justify-content-center">
+          <Form inline>
+
+            <Form.Label className="my-1 mr-2" htmlFor="inlineFormCustomSelectPref">Storage Value</Form.Label>
+            <Form.Control className="my-1 mr-sm-2" id="storageAmountInput" type="number" ref={c => { this.storageAmountInput = c }} />
+
+            <Button variant="primary" onClick={(e) => {
+              e.preventDefault();
+              this.addToSimpleStorage()
+            }}
+            >Set Storage
+              </Button>
+          </Form>
         </div>
-        <div>Transaction History: </div>
-        <div>
+        <br></br>
+        <div class="d-flex justify-content-center">Transaction History: </div>
+        <div class="d-flex justify-content-center">
           <EventHistory events={this.state.eventHistory} />
         </div>
       </div>
+
     );
   }
 }
