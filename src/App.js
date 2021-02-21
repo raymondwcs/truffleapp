@@ -7,7 +7,6 @@ import getWeb3 from "./getWeb3";
 // const path = require('path');
 // var SimpleStorageABI = require(path.join(__dirname, '../build/contracts/SimpleStorage'))
 import SimpleStorageContract from "./contracts/SimpleStorage.json";
-// const SimpleStorageContract = require(path.join(__dirname, '../contracts/SimpleStorage'))
 
 class App extends React.Component {
   constructor(props) {
