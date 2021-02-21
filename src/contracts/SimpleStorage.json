@@ -51,15 +51,15 @@
       "type": "function"
     }
   ],
-  "metadata": "{\"compiler\":{\"version\":\"0.5.16+commit.9c3226ce\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"oldValue\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"newValue\",\"type\":\"uint256\"}],\"name\":\"ValueChanged\",\"type\":\"event\"},{\"constant\":true,\"inputs\":[],\"name\":\"get\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"x\",\"type\":\"uint256\"}],\"name\":\"set\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/src/truffleapp/contracts/SimpleStorage.sol\":\"SimpleStorage\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/src/truffleapp/contracts/SimpleStorage.sol\":{\"keccak256\":\"0x40aefd36924418f6ce21b16e24c4c9acb7e8593c46471360911fcd607b4e6c03\",\"urls\":[\"bzz-raw://e221cd76b7832d357ba35720325de98ede5c4377f51467c4d3a903991296d136\",\"dweb:/ipfs/QmYG1U66VD3rGwov61LYzijA7FvGtCCqEEKeW54MkFWsnd\"]}},\"version\":1}",
-  "bytecode": "0x60806040526000805534801561001457600080fd5b50610112806100246000396000f3fe6080604052348015600f57600080fd5b506004361060325760003560e01c806360fe47b11460375780636d4ce63c146062575b600080fd5b606060048036036020811015604b57600080fd5b8101908080359060200190929190505050607e565b005b606860d4565b6040518082815260200191505060405180910390f35b600054600181905550806000819055507f2db947ef788961acc438340dbcb4e242f80d026b621b7c98ee30619950390382600154600054604051808381526020018281526020019250505060405180910390a150565b6000805490509056fea265627a7a72315820bc8b4a1b6147fa7056518f6f2ecf626924fca21ec8b00e67cb588cded6719f3964736f6c63430005100032",
-  "deployedBytecode": "0x6080604052348015600f57600080fd5b506004361060325760003560e01c806360fe47b11460375780636d4ce63c146062575b600080fd5b606060048036036020811015604b57600080fd5b8101908080359060200190929190505050607e565b005b606860d4565b6040518082815260200191505060405180910390f35b600054600181905550806000819055507f2db947ef788961acc438340dbcb4e242f80d026b621b7c98ee30619950390382600154600054604051808381526020018281526020019250505060405180910390a150565b6000805490509056fea265627a7a72315820bc8b4a1b6147fa7056518f6f2ecf626924fca21ec8b00e67cb588cded6719f3964736f6c63430005100032",
+  "metadata": "{\"compiler\":{\"version\":\"0.5.16+commit.9c3226ce\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"oldValue\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"newValue\",\"type\":\"uint256\"}],\"name\":\"ValueChanged\",\"type\":\"event\"},{\"constant\":true,\"inputs\":[],\"name\":\"get\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"x\",\"type\":\"uint256\"}],\"name\":\"set\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/src/contracts/SimpleStorage.sol\":\"SimpleStorage\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/src/contracts/SimpleStorage.sol\":{\"keccak256\":\"0x40aefd36924418f6ce21b16e24c4c9acb7e8593c46471360911fcd607b4e6c03\",\"urls\":[\"bzz-raw://e221cd76b7832d357ba35720325de98ede5c4377f51467c4d3a903991296d136\",\"dweb:/ipfs/QmYG1U66VD3rGwov61LYzijA7FvGtCCqEEKeW54MkFWsnd\"]}},\"version\":1}",
+  "bytecode": "0x60806040526000805534801561001457600080fd5b50610112806100246000396000f3fe6080604052348015600f57600080fd5b506004361060325760003560e01c806360fe47b11460375780636d4ce63c146062575b600080fd5b606060048036036020811015604b57600080fd5b8101908080359060200190929190505050607e565b005b606860d4565b6040518082815260200191505060405180910390f35b600054600181905550806000819055507f2db947ef788961acc438340dbcb4e242f80d026b621b7c98ee30619950390382600154600054604051808381526020018281526020019250505060405180910390a150565b6000805490509056fea265627a7a72315820588dbdb2134b700aaa043ed52202ff586e8f02dd347012061861fb0b65df625664736f6c63430005100032",
+  "deployedBytecode": "0x6080604052348015600f57600080fd5b506004361060325760003560e01c806360fe47b11460375780636d4ce63c146062575b600080fd5b606060048036036020811015604b57600080fd5b8101908080359060200190929190505050607e565b005b606860d4565b6040518082815260200191505060405180910390f35b600054600181905550806000819055507f2db947ef788961acc438340dbcb4e242f80d026b621b7c98ee30619950390382600154600054604051808381526020018281526020019250505060405180910390a150565b6000805490509056fea265627a7a72315820588dbdb2134b700aaa043ed52202ff586e8f02dd347012061861fb0b65df625664736f6c63430005100032",
   "sourceMap": "66:341:1:-;;;111:1;93:19;;66:341;8:9:-1;5:2;;;30:1;27;20:12;5:2;66:341:1;;;;;;;",
   "deployedSourceMap": "66:341:1:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;66:341:1;;;;;;;;;;;;;;;;;;;;;;;;195:136;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;195:136:1;;;;;;;;;;;;;;;;;:::i;:::-;;335:70;;;:::i;:::-;;;;;;;;;;;;;;;;;;;195:136;245:10;;229:13;:26;;;;274:1;261:10;:14;;;;287:39;300:13;;315:10;;287:39;;;;;;;;;;;;;;;;;;;;;;;;195:136;:::o;335:70::-;371:4;390:10;;383:17;;335:70;:::o",
   "source": "// SPDX-License-Identifier: MIT\npragma solidity >=0.4.21 <0.7.0;\n\ncontract SimpleStorage {\n  uint storedData = 0;\n  uint storedOldData;\n\n  event ValueChanged(uint oldValue, uint256 newValue);\n\n  function set(uint x) public {\n    storedOldData = storedData;\n    storedData = x;\n\n    emit ValueChanged(storedOldData, storedData);\n  }\n\n  function get() public view returns (uint) {\n    return storedData;\n  }\n}",
-  "sourcePath": "/src/truffleapp/contracts/SimpleStorage.sol",
+  "sourcePath": "/src/contracts/SimpleStorage.sol",
   "ast": {
-    "absolutePath": "/src/truffleapp/contracts/SimpleStorage.sol",
+    "absolutePath": "/src/contracts/SimpleStorage.sol",
     "exportedSymbols": {
       "SimpleStorage": [
         77
@@ -544,7 +544,7 @@
   },
   "legacyAST": {
     "attributes": {
-      "absolutePath": "/src/truffleapp/contracts/SimpleStorage.sol",
+      "absolutePath": "/src/contracts/SimpleStorage.sol",
       "exportedSymbols": {
         "SimpleStorage": [
           77
@@ -1115,10 +1115,36 @@
       "links": {},
       "address": "0x239083C1a06dD0e1EbC54d1346e6edC134ADA339",
       "transactionHash": "0xd4b6f03817fde9bb499fddefcde43782c22a8d0a5257377e68ab43456c540e34"
+    },
+    "1613947803305": {
+      "events": {
+        "0x2db947ef788961acc438340dbcb4e242f80d026b621b7c98ee30619950390382": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "oldValue",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "newValue",
+              "type": "uint256"
+            }
+          ],
+          "name": "ValueChanged",
+          "type": "event"
+        }
+      },
+      "links": {},
+      "address": "0x268390B54B97Da501059C9d7f5eE234Bdaecd086",
+      "transactionHash": "0x97e6163f1b6dae6c69584f281a077637edd0ee8bcc9ca4ea0ee165f5bb87cc7b"
     }
   },
   "schemaVersion": "3.3.4",
-  "updatedAt": "2021-02-21T01:50:53.741Z",
+  "updatedAt": "2021-02-21T22:53:59.480Z",
   "networkType": "ethereum",
   "devdoc": {
     "methods": {}

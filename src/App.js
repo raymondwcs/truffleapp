@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import 'bootstrap/dist/css/bootstrap.css';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import Table from 'react-bootstrap/Table';
 import Container from 'react-bootstrap/Container';
 
 // import logo from './logo.svg';
@@ -126,7 +127,7 @@ class App extends React.Component {
       return <div>Loading Web3, accounts, and contract...</div>;
     }
     return (
-      <div className="App">
+      <div className="App" class="container-fluid">
         <h1 class="d-flex justify-content-center">Good to Go!</h1>
         <p class="d-flex justify-content-center">Your Truffle Box is installed and ready.</p>
         <h2 class="d-flex justify-content-center">Smart Contract Example</h2>
@@ -162,12 +163,30 @@ class App extends React.Component {
     );
   }
 }
+
 class EventHistory extends React.Component {
   render() {
-    let listItems = this.props.events.map((e) => <li key={e.transactionHash}>Value: {e.newValue} (was {e.oldValue})</li>)
-    return <ol>{listItems}</ol>
+    // let listItems = this.props.events.map((e) => <li key={e.transactionHash}>Value: {e.newValue} (was {e.oldValue})</li>)
+    // return <ol>{listItems}</ol>
+    let listItems = this.props.events.map((e) =>
+      <tr key={e.transactionHash}><td>key={e.transactionHash}</td><td>{e.newValue}</td><td>{e.oldValue}</td></tr>)
+    return (
+      <Table striped bordered hover size="sm">
+        <thead>
+          <tr>
+            <th>Hash</th>
+            <th>New Value</th>
+            <th>Old Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          {listItems}
+        </tbody>
+      </Table>
+    )
   }
 }
+
 /*
 function App() {
   return (
