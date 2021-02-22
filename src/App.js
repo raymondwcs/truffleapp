@@ -138,18 +138,20 @@ class App extends React.Component {
         {/* <p>
           Try changing the value stored on <strong>line 40</strong> of App.js.
         </p> */}
-        <div class="d-flex justify-content-center">The stored value is: {this.state.storageValue}</div>
+        <div class="d-flex justify-content-center">
+          <p>The stored value is: <span class="text-success font-weight-bolder">{this.state.storageValue}</span></p>
+        </div>
         <div class="d-flex justify-content-center">
           <Form inline>
 
-            <Form.Label className="my-1 mr-2" htmlFor="inlineFormCustomSelectPref">Storage Value</Form.Label>
+            <Form.Label className="my-1 mr-2" htmlFor="inlineFormCustomSelectPref">Stored Value</Form.Label>
             <Form.Control className="my-1 mr-sm-2" id="storageAmountInput" type="number" ref={c => { this.storageAmountInput = c }} />
 
             <Button variant="primary" onClick={(e) => {
               e.preventDefault();
               this.addToSimpleStorage()
             }}
-            >Set Storage
+            >Change
               </Button>
           </Form>
         </div>
