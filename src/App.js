@@ -139,7 +139,7 @@ class App extends React.Component {
           Try changing the value stored on <strong>line 40</strong> of App.js.
         </p> */}
         <div class="d-flex justify-content-center">
-          <p>The stored value is: <span class="text-success font-weight-bolder">{this.state.storageValue}</span></p>
+          <p>The stored value is: <span class="h3 text-success font-weight-bolder">{this.state.storageValue}</span></p>
         </div>
         <div class="d-flex justify-content-center">
           <Form inline>
@@ -171,13 +171,13 @@ class EventHistory extends React.Component {
     // let listItems = this.props.events.map((e) => <li key={e.transactionHash}>Value: {e.newValue} (was {e.oldValue})</li>)
     // return <ol>{listItems}</ol>
     let listItems = this.props.events.map((e) =>
-      <tr key={e.transactionHash}><td>key={e.transactionHash}</td><td>{e.newValue}</td><td>{e.oldValue}</td></tr>)
+      <tr key={e.transactionHash}><td>{e.transactionHash}</td><td class="bg-success text-white">{e.newValue}</td><td>{e.oldValue}</td></tr>)
     return (
       <Table striped bordered hover size="sm">
         <thead>
           <tr>
             <th>Hash</th>
-            <th>New Value</th>
+            <th td class="bg-success text-white">New Value</th>
             <th>Old Value</th>
           </tr>
         </thead>
