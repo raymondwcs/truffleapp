@@ -172,13 +172,18 @@ class EventHistory extends React.Component {
     // let listItems = this.props.events.map((e) => <li key={e.transactionHash}>Value: {e.newValue} (was {e.oldValue})</li>)
     // return <ol>{listItems}</ol>
     let listItems = this.props.events.map((e) =>
-      <tr key={e.transactionHash}><td>{e.transactionHash}</td><td class="bg-success text-white">{e.newValue}</td><td>{e.oldValue}</td></tr>)
+      <tr key={e.transactionHash}>
+        <td>{e.transactionHash}</td>
+        <td class="bg-success text-white">{e.newValue}</td>
+        <td>{e.oldValue}</td>
+      </tr>
+    )
     return (
       <Table striped bordered hover size="sm">
         <thead>
           <tr>
             <th>Hash</th>
-            <th td class="bg-success text-white">New Value</th>
+            <th class="bg-success text-white">New Value</th>
             <th>Old Value</th>
           </tr>
         </thead>
