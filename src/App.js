@@ -59,7 +59,8 @@ class App extends React.Component {
     // Declaring this for later so we can chain functions on SimpleStorage.
     var simpleStorageInstance
 
-    this.state.web3.eth.getAccounts((error, accounts) => {
+    // this.state.web3.eth.getAccounts((error, accounts) => {
+    this.state.web3.eth.getAccounts().then(accounts => {
       simpleStorage.deployed().then((instance) => {
         simpleStorageInstance = instance
 

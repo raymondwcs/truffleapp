@@ -14,7 +14,7 @@ services:
     build: .
     command: bash -c "truffle migrate --network ganache && yarn start"
     environment:
-      - ETHCLIENT="http://127.0.0.1:8545"
+      - REACT_APP_API_URL="https://eth-ropsten.alchemyapi.io/v2/fMiAOEeNXmbi-ZsNDwTVZKlCnMs5RXLS"
     restart: on-failure
     depends_on: 
       - "ganache-cli"

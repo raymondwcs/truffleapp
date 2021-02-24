@@ -1,4 +1,6 @@
 import Web3 from 'web3'
+// require('dotenv').config({ path: '../.env' })
+// const { API_URL, MNEMONIC } = process.env;
 
 let getWeb3 = new Promise(function (resolve, reject) {
     // Wait for loading completion to avoid race conditions with web3 injection timing.
@@ -21,7 +23,9 @@ let getWeb3 = new Promise(function (resolve, reject) {
         } else {
             // Fallback to localhost if no web3 injection. We've configured this to
             // use the development console's port by default.
-            var provider = new Web3.providers.HttpProvider(process.env.ETHCLIENT || 'http://127.0.0.1:8545')
+            console.log(`provider: ${process.env.REACT_APP_API_URL}`)
+            var provider = new Web3.providers.HttpProvider(process.env.REACT_APP_API_URL || 'http://127.0.0.1:8545')
+            // var provider = new Web3.providers.HttpProvider("https://eth-ropsten.alchemyapi.io/v2/fMiAOEeNXmbi-ZsNDwTVZKlCnMs5RXLS")
 
             web3 = new Web3(provider)
 
