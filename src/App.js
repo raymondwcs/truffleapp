@@ -1,10 +1,10 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+// import ReactDOM from 'react-dom';
 import 'bootstrap/dist/css/bootstrap.css';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Table from 'react-bootstrap/Table';
-import Container from 'react-bootstrap/Container';
+// import Container from 'react-bootstrap/Container';
 
 // import logo from './logo.svg';
 // import './App.css';
@@ -25,7 +25,7 @@ class App extends React.Component {
     }
     this.addToSimpleStorage = this.addToSimpleStorage.bind(this);
   }
-  componentWillMount() {
+  componentDidMount() {
     // Get network provider and web3 instance.
     // See utils/getWeb3 for more info.
 
@@ -128,21 +128,21 @@ class App extends React.Component {
       return <div>Loading Web3, accounts, and contract...</div>;
     }
     return (
-      <div className="App" class="container-fluid">
-        <h1 class="d-flex justify-content-center">Good to Go!</h1>
-        <p class="d-flex justify-content-center">Your Truffle Box is installed and ready.</p>
-        <h2 class="d-flex justify-content-center">Smart Contract Example</h2>
-        <p class="d-flex justify-content-center">
+      <div className="App container-fluid">
+        <h1 className="d-flex justify-content-center">Good to Go!</h1>
+        <p className="d-flex justify-content-center">Your Truffle Box is installed and ready.</p>
+        <h2 className="d-flex justify-content-center">Smart Contract Example</h2>
+        <p className="d-flex justify-content-center">
           If your contracts compiled and migrated successfully, below will show
           a stored value of 5 (by default).
         </p>
         {/* <p>
           Try changing the value stored on <strong>line 40</strong> of App.js.
         </p> */}
-        <div class="d-flex justify-content-center">
-          <p>The stored value is: <span class="h3 text-success font-weight-bolder">{this.state.storageValue}</span></p>
+        <div className="d-flex justify-content-center">
+          <p>The stored value is: <span className="h3 text-success font-weight-bolder">{this.state.storageValue}</span></p>
         </div>
-        <div class="d-flex justify-content-center">
+        <div className="d-flex justify-content-center">
           <Form inline>
 
             <Form.Label className="my-1 mr-2" htmlFor="inlineFormCustomSelectPref">Stored Value</Form.Label>
@@ -157,8 +157,8 @@ class App extends React.Component {
           </Form>
         </div>
         <br></br>
-        <div class="d-flex justify-content-center">Transaction History: </div>
-        <div class="d-flex justify-content-center">
+        <div className="d-flex justify-content-center">Transaction History: </div>
+        <div className="d-flex justify-content-center">
           <EventHistory events={this.state.eventHistory} />
         </div>
       </div>
@@ -174,7 +174,7 @@ class EventHistory extends React.Component {
     let listItems = this.props.events.map((e) =>
       <tr key={e.transactionHash}>
         <td>{e.transactionHash}</td>
-        <td class="bg-success text-white">{e.newValue}</td>
+        <td className="bg-success text-white">{e.newValue}</td>
         <td>{e.oldValue}</td>
       </tr>
     )
@@ -183,7 +183,7 @@ class EventHistory extends React.Component {
         <thead>
           <tr>
             <th>Hash</th>
-            <th class="bg-success text-white">New Value</th>
+            <th className="bg-success text-white">New Value</th>
             <th>Old Value</th>
           </tr>
         </thead>
