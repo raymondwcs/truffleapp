@@ -23,9 +23,9 @@ class App extends React.Component {
       web3: null,
       eventHistory: []
     }
-    this.addToSimpleStorage = this.addToSimpleStorage.bind(this);
   }
-  componentDidMount() {
+
+  componentWillMount() {
     // Get network provider and web3 instance.
     // See utils/getWeb3 for more info.
 
@@ -44,14 +44,8 @@ class App extends React.Component {
       })
   }
 
-  instantiateContract() {
-    /*
-     * SMART CONTRACT EXAMPLE
-     *
-     * Normally these functions would be called in the context of a
-     * state management library, but for convenience I've placed them here.
-     */
 
+  instantiateContract() {
     const contract = require('@truffle/contract')
     const simpleStorage = contract(SimpleStorageContract)
     simpleStorage.setProvider(this.state.web3.currentProvider)
@@ -70,7 +64,7 @@ class App extends React.Component {
           simpleStorageInstance
         }));
 
-        return simpleStorageInstance.set(5, { from: accounts[0] })
+        //return simpleStorageInstance.set(5, { from: accounts[0] })
       }).then((results) => {
         console.log(results)
         return simpleStorageInstance.get()
@@ -97,11 +91,9 @@ class App extends React.Component {
     })
   }
 
-  addToSimpleStorage = () => {
+  addToSimpleStorage = (value) => {
     if (this.state.simpleStorageInstance && this.state.accounts) {
-      const value = this.storageAmountInput.value;
-      console.log('value to be stored is');
-      console.log(value);
+      console.log(`value to be stored is = ${value}`);
       this.state.simpleStorageInstance.set(value, { from: this.state.accounts[0] })
         .then((results) => {
           return this.state.simpleStorageInstance.get()
@@ -132,25 +124,18 @@ class App extends React.Component {
         <h1 className="d-flex justify-content-center">Good to Go!</h1>
         <p className="d-flex justify-content-center">Your Truffle Box is installed and ready.</p>
         <h2 className="d-flex justify-content-center">Smart Contract Example</h2>
-        <p className="d-flex justify-content-center">
-          If your contracts compiled and migrated successfully, below will show
-          a stored value of 5 (by default).
-        </p>
-        {/* <p>
-          Try changing the value stored on <strong>line 40</strong> of App.js.
-        </p> */}
         <div className="d-flex justify-content-center">
-          <p>The stored value is: <span className="h3 text-success font-weight-bolder">{this.state.storageValue}</span></p>
+          <p>Current stored value is: <span className="h3 text-success font-weight-bolder">{this.state.storageValue}</span></p>
         </div>
         <div className="d-flex justify-content-center">
           <Form inline>
 
-            <Form.Label className="my-1 mr-2" htmlFor="inlineFormCustomSelectPref">Stored Value</Form.Label>
-            <Form.Control className="my-1 mr-sm-2" id="storageAmountInput" type="number" ref={c => { this.storageAmountInput = c }} />
-
+            <Form.Label className="my-1 mr-2" htmlFor="inlineFormCustomSelectPref">New stored Value</Form.Label>
+            {/* <Form.Control className="my-1 mr-sm-2" id="storageAmountInput" type="number" ref={c => { this.storageAmountInput = c }} /> */}
+            <Form.Control className="my-1 mr-sm-2" id="storageAmountInput" type="number"></Form.Control>
             <Button variant="primary" onClick={(e) => {
               e.preventDefault();
-              this.addToSimpleStorage()
+              this.addToSimpleStorage(document.getElementById("storageAmountInput").value)
             }}
             >Change
               </Button>
