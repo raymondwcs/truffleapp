@@ -142,10 +142,7 @@ class App extends React.Component {
           </Form>
         </div>
         <br></br>
-        <div className="d-flex justify-content-center">Transaction History: </div>
-        <div className="d-flex justify-content-center">
-          <EventHistory events={this.state.eventHistory} />
-        </div>
+        <EventHistory events={this.state.eventHistory} />
       </div>
 
     );
@@ -153,7 +150,11 @@ class App extends React.Component {
 }
 
 class EventHistory extends React.Component {
+
   render() {
+    if (this.props.events.length === 0) {
+      return < div ></div >
+    }
     // let listItems = this.props.events.map((e) => <li key={e.transactionHash}>Value: {e.newValue} (was {e.oldValue})</li>)
     // return <ol>{listItems}</ol>
     let listItems = this.props.events.map((e) =>
@@ -164,18 +165,23 @@ class EventHistory extends React.Component {
       </tr>
     )
     return (
-      <Table striped bordered hover size="sm">
-        <thead>
-          <tr>
-            <th>Hash</th>
-            <th className="bg-success text-white">New Value</th>
-            <th>Old Value</th>
-          </tr>
-        </thead>
-        <tbody>
-          {listItems}
-        </tbody>
-      </Table>
+      <div >
+        <div className="d-flex justify-content-center">Transaction History</div>
+        <div className="d-flex justify-content-center">
+          <Table striped bordered hover size="sm">
+            <thead>
+              <tr>
+                <th>Hash</th>
+                <th className="bg-success text-white">New Value</th>
+                <th>Old Value</th>
+              </tr>
+            </thead>
+            <tbody>
+              {listItems}
+            </tbody>
+          </Table>
+        </div>
+      </div>
     )
   }
 }
