@@ -2,7 +2,7 @@
 pragma solidity >=0.4.21 <0.7.0;
 
 contract SimpleStorage {
-  uint storedData = 0;
+  uint public storedData = 0;
   uint storedOldData;
 
   event ValueChanged(uint oldValue, uint256 newValue);

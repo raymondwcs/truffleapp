@@ -5,5 +5,5 @@ FROM truffle as truffleapp
 RUN mkdir -p /src
 COPY . /src/
 WORKDIR /src
-RUN npm install
+RUN yarn
 EXPOSE 3000
