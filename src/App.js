@@ -94,6 +94,7 @@ class App extends React.Component {
   addToSimpleStorage = (value) => {
     if (this.state.simpleStorageInstance && this.state.accounts) {
       console.log(`value to be stored is = ${value}`);
+      console.log(`account: ${this.state.accounts}`)
       this.state.simpleStorageInstance.set(value, { from: this.state.accounts[0] })
         .then((results) => {
           return this.state.simpleStorageInstance.get()

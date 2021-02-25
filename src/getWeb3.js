@@ -10,6 +10,21 @@ let getWeb3 = new Promise(function (resolve, reject) {
 
         // Checking if Web3 has been injected by the browser (Mist/MetaMask)
         if (typeof web3 !== 'undefined') {
+            if (window.ethereum != null) {
+                web3 = new Web3(window.ethereum);
+                window.ethereum.enable()
+                .then(console.log(`window.ethereum.enabled() succeed!`))
+                .catch(error => console.log(error))
+                /*
+                try {
+                  // Request account access if needed
+                  await window.ethereum.enable();
+                  // Acccounts now exposed
+                } catch (error) {
+                  // User denied account access...
+                }
+                */
+              }
             // Use Mist/MetaMask's provider.
             web3 = new Web3(web3.currentProvider)
 
