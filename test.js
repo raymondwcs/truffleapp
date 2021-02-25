@@ -2,8 +2,6 @@ require('dotenv').config();
 const API_URL = process.env.API_URL;
 const PUBLIC_KEY = process.env.PUBLIC_KEY;
 const PRIVATE_KEY = process.env.PRIVATE_KEY;
-// const CONTRACT_ADDRESS = process.env.CONTRACT_ADDRESS;
-// const MNEMONIC = process.env.CONTRACT_ADDRESS;
 
 const path = require('path');
 const SimpleStorageABI = require(path.join(__dirname, './src/contracts/SimpleStorage'))
@@ -39,12 +37,20 @@ SimpleStorage.deployed().then(instance => {
     let x = getRandomInt(9999)
     console.log(`Set storedData to ${x}`)
     instance.set(x, { from: PUBLIC_KEY }).then(results => {
+        console.dir(results)
         console.log(`set() done`)
         return instance
     }).then(instance => {
+        console.log(`Get storedData`)
         instance.get().then(results => {
             console.log(`storedData is now ${results.toNumber()}`)
-            exit()
+            exit(0)
         })
+    }).catch(error => {
+        console.error(error.message)
+        exit(-1)
     })
+}).catch(error => {
+    console.error(error.message)
+    exit(-1)
 })
