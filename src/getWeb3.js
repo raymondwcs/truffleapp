@@ -5,32 +5,14 @@ require('dotenv').config({ path: "../.env" })
 
 let getWeb3 = new Promise(function (resolve, reject) {
     // Wait for loading completion to avoid race conditions with web3 injection timing.
-    window.addEventListener('load', function () {
-        var results
-        var web3 = window.web3
+    // window.addEventListener('load', function () {
+    window.addEventListener('DOMContentLoaded', () => {
+        if (window.ethereum) {
+            window.web3 = new Web3(window.ethereum);
+            window.ethereum.enable();
 
-        // Checking if Web3 has been injected by the browser (Mist/MetaMask)
-        if (typeof web3 !== 'undefined') {
-            if (window.ethereum != null) {
-                web3 = new Web3(window.ethereum);
-                window.ethereum.enable()
-                    .then(console.log(`window.ethereum.enabled() succeed!`))
-                    .catch(error => console.log(error))
-                /*
-                try {
-                  // Request account access if needed
-                  await window.ethereum.enable();
-                  // Acccounts now exposed
-                } catch (error) {
-                  // User denied account access...
-                }
-                */
-            }
-            // Use Mist/MetaMask's provider.
-            web3 = new Web3(web3.currentProvider)
-
-            results = {
-                web3: web3
+            let results = {
+                web3: window.web3
             }
 
             console.log('Injected web3 detected.');
@@ -48,8 +30,8 @@ let getWeb3 = new Promise(function (resolve, reject) {
                 },
                 providerOrUrl: process.env.REACT_APP_API_URL
             })
-            web3 = new Web3(provider)
-            results = {
+            let web3 = new Web3(provider)
+            let results = {
                 web3: web3
             }
 
