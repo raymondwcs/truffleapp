@@ -9,7 +9,7 @@ let getWeb3 = new Promise(function (resolve, reject) {
     window.addEventListener('DOMContentLoaded', () => {
         if (window.ethereum) {
             window.web3 = new Web3(window.ethereum);
-            window.ethereum.enable();
+            window.ethereum.enable();   // seek Metamask account use permission 
 
             let results = {
                 web3: window.web3
@@ -19,10 +19,7 @@ let getWeb3 = new Promise(function (resolve, reject) {
 
             resolve(results)
         } else {
-            // Fallback to localhost if no web3 injection. We've configured this to
-            // use the development console's port by default.
-            // var provider = new Web3.providers.HttpProvider('http://127.0.0.1:8545')
-            // web3 = new Web3(provider)
+            // Use .env (env-sample as example) to determine provider
             console.log(`MNEMONIC = ${process.env.REACT_APP_MNEMONIC}`)
             var provider = new HDWalletProvider({
                 mnemonic: {
@@ -36,13 +33,6 @@ let getWeb3 = new Promise(function (resolve, reject) {
             }
 
             console.log(`No web3 instance injected, using ${process.env.REACT_APP_API_URL}`);
-
-            // optional for HTTPProviders, but if you want to set your own web3 that is
-            // different than HttpProvider.
-            // Please uncomment below.
-            // if (window.moesif) {
-            //   window.moesif.useWeb3(web3);
-            // }
 
             resolve(results)
         }
