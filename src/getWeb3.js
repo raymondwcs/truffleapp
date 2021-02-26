@@ -1,6 +1,7 @@
 import Web3 from 'web3'
-// require('dotenv').config({ path: '../.env' })
-// const { API_URL, MNEMONIC } = process.env;
+// import HDWalletProvider from '@truffle/hdwallet-provider'
+const HDWalletProvider = require("@truffle/hdwallet-provider")
+require('dotenv').config({ path: "../.env" })
 
 let getWeb3 = new Promise(function (resolve, reject) {
     // Wait for loading completion to avoid race conditions with web3 injection timing.
@@ -13,8 +14,8 @@ let getWeb3 = new Promise(function (resolve, reject) {
             if (window.ethereum != null) {
                 web3 = new Web3(window.ethereum);
                 window.ethereum.enable()
-                .then(console.log(`window.ethereum.enabled() succeed!`))
-                .catch(error => console.log(error))
+                    .then(console.log(`window.ethereum.enabled() succeed!`))
+                    .catch(error => console.log(error))
                 /*
                 try {
                   // Request account access if needed
@@ -24,7 +25,7 @@ let getWeb3 = new Promise(function (resolve, reject) {
                   // User denied account access...
                 }
                 */
-              }
+            }
             // Use Mist/MetaMask's provider.
             web3 = new Web3(web3.currentProvider)
 
@@ -38,17 +39,21 @@ let getWeb3 = new Promise(function (resolve, reject) {
         } else {
             // Fallback to localhost if no web3 injection. We've configured this to
             // use the development console's port by default.
-            console.log(`provider: ${process.env.REACT_APP_API_URL}`)
-            var provider = new Web3.providers.HttpProvider(process.env.REACT_APP_API_URL || 'http://127.0.0.1:8545')
-            // var provider = new Web3.providers.HttpProvider("https://eth-ropsten.alchemyapi.io/v2/fMiAOEeNXmbi-ZsNDwTVZKlCnMs5RXLS")
-
+            // var provider = new Web3.providers.HttpProvider('http://127.0.0.1:8545')
+            // web3 = new Web3(provider)
+            console.log(`MNEMONIC = ${process.env.REACT_APP_MNEMONIC}`)
+            var provider = new HDWalletProvider({
+                mnemonic: {
+                    phrase: process.env.REACT_APP_MNEMONIC
+                },
+                providerOrUrl: process.env.REACT_APP_API_URL
+            })
             web3 = new Web3(provider)
-
             results = {
                 web3: web3
             }
 
-            console.log('No web3 instance injected, using Local web3.');
+            console.log(`No web3 instance injected, using ${process.env.REACT_APP_API_URL}`);
 
             // optional for HTTPProviders, but if you want to set your own web3 that is
             // different than HttpProvider.

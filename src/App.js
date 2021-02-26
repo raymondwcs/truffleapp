@@ -25,7 +25,7 @@ class App extends React.Component {
     }
   }
 
-  componentWillMount() {
+  componentDidMount() {
     // Get network provider and web3 instance.
     // See utils/getWeb3 for more info.
 
@@ -64,14 +64,14 @@ class App extends React.Component {
           simpleStorageInstance
         }));
 
-        //return simpleStorageInstance.set(5, { from: accounts[0] })
-      }).then((results) => {
-        console.log(results)
         return simpleStorageInstance.get()
+        //return simpleStorageInstance.set(5, { from: accounts[0] })
       }).then((results) => {
         console.log(results.toNumber())
         this.setState({ storageValue: results.toNumber() })
         this.updateEventHistory()
+      }).catch(error => {
+        alert(error.message)
       })
     })
   }
