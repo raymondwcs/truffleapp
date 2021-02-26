@@ -12,7 +12,7 @@ module.exports = {
       port: 8545
     },
     ganache: {
-      host: "ganache-cli",
+      host: "ganache",
       port: 8545,
       network_id: "*"
     },
