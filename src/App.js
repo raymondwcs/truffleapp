@@ -121,7 +121,8 @@ class App extends React.Component {
       return <div>Loading Web3, accounts, and contract...</div>;
     }
     return (
-      <div className="App container-fluid">
+      <div className="App container">
+
         <h1 className="d-flex justify-content-center">Good to Go!</h1>
         <p className="d-flex justify-content-center">Your Truffle Box is installed and ready.</p>
         <h2 className="d-flex justify-content-center">Smart Contract Example</h2>
@@ -143,7 +144,13 @@ class App extends React.Component {
           </Form>
         </div>
         <br></br>
-        <EventHistory events={this.state.eventHistory} />
+        <div className="row">
+          <div className="col-md-3"></div>
+          <div className="col-md-6">
+            <EventHistory events={this.state.eventHistory} />
+          </div>
+          <div className="col-md-3"></div>
+        </div>
       </div>
 
     );
@@ -160,21 +167,22 @@ class EventHistory extends React.Component {
     // return <ol>{listItems}</ol>
     let listItems = this.props.events.map((e) =>
       <tr key={e.transactionHash}>
-        <td>{e.transactionHash}</td>
-        <td className="bg-success text-white">{e.newValue}</td>
+        {/* <td>{e.transactionHash}</td> */}
+        <td className="text-success">{e.newValue}</td>
         <td>{e.oldValue}</td>
       </tr>
     )
     return (
       <div >
         <div className="d-flex justify-content-center">Transaction History</div>
+        {/* <div className="d-flex justify-content-center table-wrapper-scroll-y my-custom-scrollbar"> */}
         <div className="d-flex justify-content-center">
           <Table striped bordered hover size="sm">
             <thead>
               <tr>
-                <th>Hash</th>
-                <th className="bg-success text-white">New Value</th>
-                <th>Old Value</th>
+                {/* <th>Hash</th> */}
+                <th className="bg-success text-white col-auto">New Value</th>
+                <th className="col-auto">Old Value</th>
               </tr>
             </thead>
             <tbody>

@@ -36,3 +36,12 @@
     transform: rotate(360deg);
   }
 }
+
+.my-custom-scrollbar {
+position: relative;
+height: 600px;
+overflow: auto;
+}
+.table-wrapper-scroll-y {
+display: block;
+}
