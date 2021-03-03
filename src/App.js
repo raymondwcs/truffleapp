@@ -32,7 +32,9 @@ class App extends React.Component {
     getWeb3
       .then(results => {
         this.setState({
-          web3: results.web3
+          web3: results.web3,
+          accounts: results.accounts,
+          network: results.network
         })
 
         // Instantiate contract once web3 provided.
@@ -53,40 +55,58 @@ class App extends React.Component {
     // Declaring this for later so we can chain functions on SimpleStorage.
     var simpleStorageInstance
 
-    // this.state.web3.eth.getAccounts((error, accounts) => {
-    this.state.web3.eth.getAccounts().then(accounts => {
-      simpleStorage.deployed().then((instance) => {
-        simpleStorageInstance = instance
-
-        this.setState(prevState => ({
-          ...prevState,
-          accounts,
-          simpleStorageInstance
-        }));
-
-        return simpleStorageInstance.get()
-        //return simpleStorageInstance.set(5, { from: accounts[0] })
-      }).then((results) => {
-        console.log(results.toNumber())
-        this.setState({ storageValue: results.toNumber() })
-        this.updateEventHistory()
-      }).catch(error => {
-        alert(error.message)
-      })
+    simpleStorage.deployed().then(instance => {
+      simpleStorageInstance = instance
+      this.setState({ simpleStorageInstance: instance })
+      return simpleStorageInstance.get()
+    }).then(results => {
+      console.log(`get() returns: ${results.toNumber()}`)
+      this.setState({ storageValue: results.toNumber() })
+      this.updateEventHistory()
+    }).catch(error => {
+      alert(error.message)
     })
+    // this.state.web3.eth.getAccounts((error, accounts) => {
+    // this.state.web3.eth.getAccounts().then(accounts => {
+    //   simpleStorage.deployed().then((instance) => {
+    //     simpleStorageInstance = instance
+
+    //     this.setState(prevState => ({
+    //       ...prevState,
+    //       accounts,
+    //       simpleStorageInstance
+    //     }));
+
+    //     return simpleStorageInstance.get()
+    //     //return simpleStorageInstance.set(5, { from: accounts[0] })
+    //   }).then((results) => {
+    //     console.log(results.toNumber())
+    //     this.setState({ storageValue: results.toNumber() })
+    //     this.updateEventHistory()
+    //   }).catch(error => {
+    //     alert(error.message)
+    //   })
+    // })
   }
 
   updateEventHistory = async () => {
     this.state.simpleStorageInstance.getPastEvents('ValueChanged', { fromBlock: 0, toBlock: 'latest' }).then(events => {
       console.log(JSON.stringify(events))
-      let history = []
-      for (let e of events) {
-        let t = {}
-        t.transactionHash = e.transactionHash
-        t.oldValue = e.returnValues.oldValue
-        t.newValue = e.returnValues.newValue
-        history.push(t)
-      }
+      let history = events.map(e => {
+        return ({
+          transactionHash: e.transactionHash,
+          oldValue = e.returnValues.oldValue,
+          newValue = e.returnValues.newValue
+        })
+      })
+      // let history = []
+      // for (let e of events) {
+      //   let t = {}
+      //   t.transactionHash = e.transactionHash
+      //   t.oldValue = e.returnValues.oldValue
+      //   t.newValue = e.returnValues.newValue
+      //   history.push(t)
+      // }
       this.setState({ eventHistory: history })
     })
   }
@@ -123,9 +143,10 @@ class App extends React.Component {
     return (
       <div className="App container">
 
-        <h1 className="d-flex justify-content-center">Good to Go!</h1>
-        <p className="d-flex justify-content-center">Your Truffle Box is installed and ready.</p>
+        {/* <h1 className="d-flex justify-content-center">Good to Go!</h1> */}
+        {/* <p className="d-flex justify-content-center">Your Truffle Box is installed and ready.</p> */}
         <h2 className="d-flex justify-content-center">Smart Contract Example</h2>
+        <Provider network={this.state.network} />
         <div className="d-flex justify-content-center">
           <p>Current stored value is: <span className="h3 text-success font-weight-bolder">{this.state.storageValue}</span></p>
         </div>
@@ -140,7 +161,7 @@ class App extends React.Component {
               this.addToSimpleStorage(document.getElementById("storageAmountInput").value)
             }}
             >Change
-              </Button>
+            </Button>
           </Form>
         </div>
         <br></br>
@@ -190,6 +211,16 @@ class EventHistory extends React.Component {
             </tbody>
           </Table>
         </div>
+      </div>
+    )
+  }
+}
+
+class Provider extends React.Component {
+  render() {
+    return (
+      <div className="d-flex justify-content-center">
+        <p>Connected to network: {this.props.network.name} (id: {this.props.network.id})</p>
       </div>
     )
   }
