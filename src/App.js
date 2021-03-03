@@ -41,8 +41,8 @@ class App extends React.Component {
         this.instantiateContract()
       })
       .catch((error) => {
-        console.log(error);
-        console.log('Error finding web3.')
+        console.log(error)
+        alert(error.message)
       })
   }
 
@@ -95,8 +95,8 @@ class App extends React.Component {
       let history = events.map(e => {
         return ({
           transactionHash: e.transactionHash,
-          oldValue = e.returnValues.oldValue,
-          newValue = e.returnValues.newValue
+          oldValue: e.returnValues.oldValue,
+          newValue: e.returnValues.newValue
         })
       })
       // let history = []

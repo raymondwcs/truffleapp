@@ -27,7 +27,10 @@ let getWeb3 = new Promise(function (resolve, reject) {
 
         } else {
             // Use .env (env-sample as example) to determine provider
-            console.log(`MNEMONIC = ${process.env.REACT_APP_MNEMONIC}`)
+            // console.log(`MNEMONIC = ${process.env.REACT_APP_MNEMONIC}`)
+            if (!process.env.REACT_APP_MNEMONIC || !process.env.REACT_APP_API_URL) {
+                reject(new Error('getWeb3(): .env not found!'))
+            }
             var provider = new HDWalletProvider({
                 mnemonic: {
                     phrase: process.env.REACT_APP_MNEMONIC
