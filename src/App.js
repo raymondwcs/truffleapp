@@ -220,8 +220,8 @@ class Provider extends React.Component {
   render() {
     return (
       <div className="d-flex justify-content-center">
-        <p>Connected to network: {this.props.network.name} (id: {this.props.network.id})</p>
-      </div>
+        <h6>Connected to network: <code>{this.props.network.name}</code></h6>
+      </div >
     )
   }
 }
