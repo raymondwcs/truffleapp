@@ -4,7 +4,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Table from 'react-bootstrap/Table';
-// import Container from 'react-bootstrap/Container';
+import Container from 'react-bootstrap/Container';
 
 // import logo from './logo.svg';
 // import './App.css';
@@ -66,27 +66,6 @@ class App extends React.Component {
     }).catch(error => {
       alert(error.message)
     })
-    // this.state.web3.eth.getAccounts((error, accounts) => {
-    // this.state.web3.eth.getAccounts().then(accounts => {
-    //   simpleStorage.deployed().then((instance) => {
-    //     simpleStorageInstance = instance
-
-    //     this.setState(prevState => ({
-    //       ...prevState,
-    //       accounts,
-    //       simpleStorageInstance
-    //     }));
-
-    //     return simpleStorageInstance.get()
-    //     //return simpleStorageInstance.set(5, { from: accounts[0] })
-    //   }).then((results) => {
-    //     console.log(results.toNumber())
-    //     this.setState({ storageValue: results.toNumber() })
-    //     this.updateEventHistory()
-    //   }).catch(error => {
-    //     alert(error.message)
-    //   })
-    // })
   }
 
   updateEventHistory = async () => {
@@ -94,19 +73,12 @@ class App extends React.Component {
       console.log(JSON.stringify(events))
       let history = events.map(e => {
         return ({
+          address: e.address,
           transactionHash: e.transactionHash,
           oldValue: e.returnValues.oldValue,
           newValue: e.returnValues.newValue
         })
       })
-      // let history = []
-      // for (let e of events) {
-      //   let t = {}
-      //   t.transactionHash = e.transactionHash
-      //   t.oldValue = e.returnValues.oldValue
-      //   t.newValue = e.returnValues.newValue
-      //   history.push(t)
-      // }
       this.setState({ eventHistory: history })
     })
   }
@@ -141,10 +113,7 @@ class App extends React.Component {
       return <div>Loading Web3, accounts, and contract...</div>;
     }
     return (
-      <div className="App container">
-
-        {/* <h1 className="d-flex justify-content-center">Good to Go!</h1> */}
-        {/* <p className="d-flex justify-content-center">Your Truffle Box is installed and ready.</p> */}
+      <Container>
         <h2 className="d-flex justify-content-center">Smart Contract Example</h2>
         <Provider network={this.state.network} />
         <div className="d-flex justify-content-center">
@@ -152,9 +121,7 @@ class App extends React.Component {
         </div>
         <div className="d-flex justify-content-center">
           <Form inline>
-
             <Form.Label className="my-1 mr-2" htmlFor="inlineFormCustomSelectPref">New stored Value</Form.Label>
-            {/* <Form.Control className="my-1 mr-sm-2" id="storageAmountInput" type="number" ref={c => { this.storageAmountInput = c }} /> */}
             <Form.Control className="my-1 mr-sm-2" id="storageAmountInput" type="number"></Form.Control>
             <Button variant="primary" onClick={(e) => {
               e.preventDefault();
@@ -165,15 +132,10 @@ class App extends React.Component {
           </Form>
         </div>
         <br></br>
-        <div className="row">
-          <div className="col-md-3"></div>
-          <div className="col-md-6">
-            <EventHistory events={this.state.eventHistory} />
-          </div>
-          <div className="col-md-3"></div>
+        <div className="d-flex flex-row justify-content-center">
+          <EventHistory className="d-flex" events={this.state.eventHistory} />
         </div>
-      </div>
-
+      </Container>
     );
   }
 }
@@ -188,7 +150,7 @@ class EventHistory extends React.Component {
     // return <ol>{listItems}</ol>
     let listItems = this.props.events.map((e) =>
       <tr key={e.transactionHash}>
-        {/* <td>{e.transactionHash}</td> */}
+        <td>{e.address}</td>
         <td className="text-success">{e.newValue}</td>
         <td>{e.oldValue}</td>
       </tr>
@@ -196,12 +158,11 @@ class EventHistory extends React.Component {
     return (
       <div >
         <div className="d-flex justify-content-center">Transaction History</div>
-        {/* <div className="d-flex justify-content-center table-wrapper-scroll-y my-custom-scrollbar"> */}
         <div className="d-flex justify-content-center">
           <Table striped bordered hover size="sm">
             <thead>
               <tr>
-                {/* <th>Hash</th> */}
+                <th className="col-auto">Address</th>
                 <th className="bg-success text-white col-auto">New Value</th>
                 <th className="col-auto">Old Value</th>
               </tr>
