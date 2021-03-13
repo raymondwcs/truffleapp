@@ -1,11 +1,20 @@
 version: "2"
 services:
+  # ganache-cli:
+  #   container_name: ganache-cli
+  #   image: ganache-cli
+  #   build: 
+  #     context: ./ganache-cli
+  #     dockerfile: Dockerfile
+  #   restart: on-failure
+  #   ports:
+  #     - "8545:8545"
+  #   networks:
+  #     - nodeapp-network
   ganache-cli:
     container_name: ganache-cli
-    image: ganache-cli
-    build: 
-      context: ./ganache-cli
-      dockerfile: Dockerfile
+    image: trufflesuite/ganache-cli
+    command: ["--port", "8545", "--host", "0.0.0.0", "-d", "--mnemonic", "gesture rather obey video awake genuine patient base soon parrot upset lounge"]
     restart: on-failure
     ports:
       - "8545:8545"
@@ -16,7 +25,7 @@ services:
     container_name: truffleapp
     image: truffleapp
     build: .
-    command: bash -c "truffle migrate --network ganache && yarn start"
+    command: bash -c "truffle migrate --network ganache && cp env-sample .env && yarn start"
     restart: on-failure
     depends_on: 
       - "ganache-cli"
