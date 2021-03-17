@@ -4,7 +4,7 @@ const MNEMONIC = process.env.MNEMONIC;
 
 const { exit } = require('process');
 const path = require('path');
-const SimpleStorageABI = require(path.join(__dirname, './src/contracts/SimpleStorage'))
+const SimpleStorageABI = require(path.join(__dirname, './src/build/contracts/SimpleStorage'))
 const Web3 = require('web3');
 const contract = require("@truffle/contract");
 const HDWalletProvider = require("@truffle/hdwallet-provider");
