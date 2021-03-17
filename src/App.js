@@ -19,7 +19,7 @@ class App extends React.Component {
     super(props)
 
     this.state = {
-      storageValue: 0,
+      storedData: 0,
       web3: null,
       eventHistory: []
     }
@@ -58,10 +58,10 @@ class App extends React.Component {
     simpleStorage.deployed().then(instance => {
       simpleStorageInstance = instance
       this.setState({ simpleStorageInstance: instance })
-      return simpleStorageInstance.get()
+      return simpleStorageInstance.storedData()
     }).then(results => {
-      console.log(`get() returns: ${results.toNumber()}`)
-      this.setState({ storageValue: results.toNumber() })
+      console.log(`storedData() returns: ${results.toNumber()}`)
+      this.setState({ storedData: results.toNumber() })
       this.updateEventHistory()
     }).catch(error => {
       alert(error.message)
@@ -69,7 +69,7 @@ class App extends React.Component {
   }
 
   updateEventHistory = async () => {
-    this.state.simpleStorageInstance.getPastEvents('ValueChanged', { fromBlock: 0, toBlock: 'latest' }).then(events => {
+    this.state.simpleStorageInstance.getPastEvents('valueChanged', { fromBlock: 0, toBlock: 'latest' }).then(events => {
       console.log(JSON.stringify(events))
       let history = events.map(e => {
         return ({
@@ -83,17 +83,38 @@ class App extends React.Component {
     })
   }
 
+  addToSimpleStorage = async (value) => {
+    if (this.state.simpleStorageInstance && this.state.accounts) {
+      console.log(`value to be stored is = ${value}`);
+      console.log(`account: ${this.state.accounts}`)
+
+      let tx = await this.state.simpleStorageInstance.set(parseInt(value), { from: this.state.accounts[0] })
+      console.log(tx)
+      let results = await this.state.simpleStorageInstance.storedData()
+      let currentStoredData = results.toNumber()
+      console.log(`addToSimpleStorage(${value}) returns ${currentStoredData}`)
+      if (currentStoredData === parseInt(value)) {
+        this.setState({ storedData: value })
+        this.updateEventHistory()
+      } else {
+        alert(`Error updating!`)
+      }
+    } else {
+      alert(`Please reload this page!`)
+    }
+  }
+  /*
   addToSimpleStorage = (value) => {
     if (this.state.simpleStorageInstance && this.state.accounts) {
       console.log(`value to be stored is = ${value}`);
       console.log(`account: ${this.state.accounts}`)
       this.state.simpleStorageInstance.set(value, { from: this.state.accounts[0] })
         .then((results) => {
-          return this.state.simpleStorageInstance.get()
+          return this.state.simpleStorageInstance.storedData()
         }).then((results) => {
           this.setState(prevState => ({
             ...prevState,
-            storageValue: results.toNumber()
+            storedData: results.toNumber()
           }));
           this.updateEventHistory()
         }).catch((err) => {
@@ -107,6 +128,7 @@ class App extends React.Component {
       }))
     }
   }
+  */
 
   render() {
     if (!this.state.web3) {
@@ -117,11 +139,11 @@ class App extends React.Component {
         <h2 className="d-flex justify-content-center">Smart Contract Example</h2>
         <Provider network={this.state.network} />
         <div className="d-flex justify-content-center">
-          <p>Current stored value is: <span className="h3 text-success font-weight-bolder">{this.state.storageValue}</span></p>
+          <p>Current stored data: <span className="h3 text-success font-weight-bolder">{this.state.storedData}</span></p>
         </div>
         <div className="d-flex justify-content-center">
           <Form inline>
-            <Form.Label className="my-1 mr-2" htmlFor="inlineFormCustomSelectPref">New stored Value</Form.Label>
+            <Form.Label className="my-1 mr-2" htmlFor="inlineFormCustomSelectPref">New stored data</Form.Label>
             <Form.Control className="my-1 mr-sm-2" id="storageAmountInput" type="number"></Form.Control>
             <Button variant="primary" onClick={(e) => {
               e.preventDefault();

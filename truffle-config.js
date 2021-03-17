@@ -8,7 +8,7 @@ module.exports = {
   // to customize your Truffle configuration!
   contracts_build_directory: path.join(__dirname, "/src/build/contracts"),
   networks: {
-    develop: {
+    development: {
       port: 8545
     },
     ganache: {
