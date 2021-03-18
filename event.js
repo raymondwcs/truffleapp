@@ -12,7 +12,7 @@ module.exports = async function main(callback) {
         // from block 0 to current block
         for (let block = 0; block <= currentBlockNumber; block++) {
             // get the numner of transaction in a block
-            console.log(`Block [${block}]`)
+            console.log(`** Block [${block}]`)
             let nTx = await web3.eth.getBlockTransactionCount(block)
             console.log(`Number of transaction(s) in block [${block}]: ${nTx}`)
             // get each transaction in a block
@@ -24,11 +24,18 @@ module.exports = async function main(callback) {
                 for (log of txReceipt.logs) {
                     for (f of Contract.abi) {
                         if (f.signature === log.topics[0]) {  // match `topics' against abi
-                            let event = await web3.eth.abi.decodeLog(
-                                f.inputs, log.data, log.topics
-                            )
                             console.log(`Name: '${f.name}', type: ${f.type}`)
-                            console.log(event)
+                            try {
+                                var event = await web3.eth.abi.decodeLog(
+                                    f.inputs, log.data, log.topics.slice(1)
+                                )
+                                console.log(event)
+                            } catch (error) {
+                                console.error(error)
+                                console.log(f.inputs)
+                                console.log(log.data)
+                                console.log(log.topics)
+                            }
                         }
                     }
                 }
