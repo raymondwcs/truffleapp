@@ -70,10 +70,10 @@ class App extends React.Component {
 
   updateEventHistory = async () => {
     this.state.simpleStorageInstance.getPastEvents('valueChanged', { fromBlock: 0, toBlock: 'latest' }).then(events => {
-      console.log(JSON.stringify(events))
       let history = events.map(e => {
         return ({
           address: e.address,
+          changedBy: e.returnValues.changedBy,
           transactionHash: e.transactionHash,
           oldValue: e.returnValues.oldValue,
           newValue: e.returnValues.newValue
@@ -90,7 +90,7 @@ class App extends React.Component {
 
       try {
         let tx = await this.state.simpleStorageInstance.set(parseInt(value), { from: this.state.accounts[0] })
-        console.log(tx)
+        console.log(`tx receipt: ${tx}`)
         let results = await this.state.simpleStorageInstance.storedData()
         let currentStoredData = results.toNumber()
         console.log(`addToSimpleStorage(${value}) returns ${currentStoredData}`)
@@ -179,7 +179,7 @@ class EventHistory extends React.Component {
     // return <ol>{listItems}</ol>
     let listItems = this.props.events.map((e) =>
       <tr key={e.transactionHash}>
-        <td>{e.address}</td>
+        <td>{e.changedBy}</td>
         <td className="text-success">{e.newValue}</td>
         <td>{e.oldValue}</td>
       </tr>
@@ -191,7 +191,7 @@ class EventHistory extends React.Component {
           <Table striped bordered hover size="sm">
             <thead>
               <tr>
-                <th className="col-auto">Address</th>
+                <th className="col-auto">Modified by</th>
                 <th className="bg-success text-white col-auto">New Value</th>
                 <th className="col-auto">Old Value</th>
               </tr>

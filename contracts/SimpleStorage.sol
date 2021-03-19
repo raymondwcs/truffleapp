@@ -4,12 +4,12 @@ pragma solidity >=0.4.21 <0.7.0;
 contract SimpleStorage {
   uint public storedData = 0;
 
-  event valueChanged(uint oldValue, uint256 newValue);
+  event valueChanged(address changedBy, uint oldValue, uint256 newValue);
 
   function set(uint x) public {
     uint previousData = storedData;
     storedData = x;
 
-    emit valueChanged(previousData, storedData);
+    emit valueChanged(msg.sender, previousData, storedData);
   }
 }
