@@ -19,7 +19,7 @@ class App extends React.Component {
     super(props)
 
     this.state = {
-      storedData: 0,
+      storedData: '?',
       web3: null,
       eventHistory: []
     }
@@ -88,16 +88,21 @@ class App extends React.Component {
       console.log(`value to be stored is = ${value}`);
       console.log(`account: ${this.state.accounts}`)
 
-      let tx = await this.state.simpleStorageInstance.set(parseInt(value), { from: this.state.accounts[0] })
-      console.log(tx)
-      let results = await this.state.simpleStorageInstance.storedData()
-      let currentStoredData = results.toNumber()
-      console.log(`addToSimpleStorage(${value}) returns ${currentStoredData}`)
-      if (currentStoredData === parseInt(value)) {
-        this.setState({ storedData: value })
-        this.updateEventHistory()
-      } else {
-        alert(`Error updating!`)
+      try {
+        let tx = await this.state.simpleStorageInstance.set(parseInt(value), { from: this.state.accounts[0] })
+        console.log(tx)
+        let results = await this.state.simpleStorageInstance.storedData()
+        let currentStoredData = results.toNumber()
+        console.log(`addToSimpleStorage(${value}) returns ${currentStoredData}`)
+        if (currentStoredData === parseInt(value)) {
+          this.setState({ storedData: value })
+          this.updateEventHistory()
+        } else {
+          alert(`Error updating!`)
+        }
+      } catch (error) {
+        alert(error)
+        return
       }
     } else {
       alert(`Please reload this page!`)
@@ -138,13 +143,15 @@ class App extends React.Component {
       <Container>
         <h2 className="d-flex justify-content-center">Smart Contract Example</h2>
         <Provider network={this.state.network} />
-        <div className="d-flex justify-content-center">
-          <p>Current stored data: <span className="h3 text-success font-weight-bolder">{this.state.storedData}</span></p>
+        <Account accounts={this.state.accounts} />
+        <ContractAddress contractInstance={this.state.simpleStorageInstance} />
+        <div className="d-flex justify-content-center mt-4">
+          <h4>Current stored data: <span className="h3 text-success font-weight-bolder">{this.state.storedData}</span></h4>
         </div>
         <div className="d-flex justify-content-center">
           <Form inline>
             <Form.Label className="my-1 mr-2" htmlFor="inlineFormCustomSelectPref">New stored data</Form.Label>
-            <Form.Control className="my-1 mr-sm-2" id="storageAmountInput" type="number"></Form.Control>
+            <Form.Control className="my-1 mr-sm-2" id="storageAmountInput" type="number" step="1" min="0"></Form.Control>
             <Button variant="primary" onClick={(e) => {
               e.preventDefault();
               this.addToSimpleStorage(document.getElementById("storageAmountInput").value)
@@ -203,7 +210,33 @@ class Provider extends React.Component {
   render() {
     return (
       <div className="d-flex justify-content-center">
-        <h6>Connected to network: <code>{this.props.network.name}</code></h6>
+        <small>Connected to network: <code className="text-info">{this.props.network.name}</code></small>
+      </div >
+    )
+  }
+}
+
+class ContractAddress extends React.Component {
+  render() {
+    console.log(this.props.contractInstance)
+    return (
+      (this.props.contractInstance !== undefined) ?
+        <div className="d-flex justify-content-center">
+          <small>Contract address: <code className="text-info">{this.props.contractInstance.address}</code></small>
+        </div>
+        :
+        <div className="d-flex justify-content-center">
+          <small className="text-danger">Contract not deployed</small>
+        </div>
+    )
+  }
+}
+
+class Account extends React.Component {
+  render() {
+    return (
+      <div className="d-flex justify-content-center">
+        <small>Account: <code className="text-info">{this.props.accounts[0]}</code></small>
       </div >
     )
   }
