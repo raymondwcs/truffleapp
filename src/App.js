@@ -44,6 +44,13 @@ class App extends React.Component {
         console.log(error)
         alert(error.message)
       })
+
+    if (window.ethereum) {
+      window.ethereum.on('accountsChanged', (accounts) => {
+        // Time to reload your interface with accounts[0]!
+        this.setState({ accounts: accounts })
+      });
+    }
   }
 
 
@@ -143,6 +150,7 @@ class App extends React.Component {
       <Container>
         <h2 className="d-flex justify-content-center">Smart Contract Example</h2>
         <Provider network={this.state.network} />
+        <Metamask ethereum={window.ethereum} />
         <Account accounts={this.state.accounts} />
         <ContractAddress contractInstance={this.state.simpleStorageInstance} />
         <div className="d-flex justify-content-center mt-4">
@@ -238,6 +246,36 @@ class Account extends React.Component {
       <div className="d-flex justify-content-center">
         <small>Account: <code className="text-info">{this.props.accounts[0]}</code></small>
       </div >
+    )
+  }
+}
+
+const connect2MetaMask = async (event) => {
+  try {
+    // Will open the MetaMask UI
+    // You should disable this button while the request is pending!
+    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+    event.target.disabled = true
+    console.log(accounts)
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+class Metamask extends React.Component {
+  render() {
+    // if (typeof this.props.ethereum === 'undefined') {
+    //   return <div></div>
+    // }
+    return (
+      (typeof this.props.ethereum != 'undefined' && this.props.ethereum.isMetaMask) ?
+        <div className="d-flex justify-content-center">
+          <Button variant="info" onClick={connect2MetaMask}>
+            Connect to MetaMask
+          </Button>
+        </div>
+        :
+        <div></div>
     )
   }
 }
