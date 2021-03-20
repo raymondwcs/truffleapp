@@ -104,10 +104,16 @@ class App extends React.Component {
         if (currentStoredData === parseInt(value)) {
           this.setState({ storedData: value })
           this.updateEventHistory()
+          // re-enable the change button
+          document.getElementById("changeButton").value = "Change"
+          document.getElementById("changeButton").disabled = false
         } else {
           alert(`Error updating!`)
         }
       } catch (error) {
+        // re-enable the change button
+        document.getElementById("changeButton").value = "Change"
+        document.getElementById("changeButton").disabled = false
         alert(error)
         return
       }
@@ -160,8 +166,13 @@ class App extends React.Component {
           <Form inline>
             <Form.Label className="my-1 mr-2" htmlFor="inlineFormCustomSelectPref">New stored data</Form.Label>
             <Form.Control className="my-1 mr-sm-2" id="storageAmountInput" type="number" step="1" min="0"></Form.Control>
-            <Button variant="primary" onClick={(e) => {
-              e.preventDefault();
+            <Button id="changeButton" variant="primary" onClick={(event) => {
+              if (event.target.key === 'Enter') {
+                event.preventDefault();
+              }
+              // disable the button until we're done
+              event.target.value = "Changing..."
+              event.target.disabled = true
               this.addToSimpleStorage(document.getElementById("storageAmountInput").value)
             }}
             >Change
@@ -226,7 +237,7 @@ class Provider extends React.Component {
 
 class ContractAddress extends React.Component {
   render() {
-    console.log(this.props.contractInstance)
+    // console.log(this.props.contractInstance)
     return (
       (this.props.contractInstance !== undefined) ?
         <div className="d-flex justify-content-center">
