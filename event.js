@@ -7,8 +7,12 @@ module.exports = async function main(callback) {
             callback(1)
         }
         const accounts = await web3.eth.getAccounts()
-        const Contract = artifacts.require(process.argv[6])
+        const Contract = artifacts.require(process.argv[6]) // need this to run!
         const instance = await Contract.deployed()
+
+        console.log(`Contract address: ${instance.address}`)
+        console.log(`accounts[]:`)
+        console.log(accounts)
 
         let currentBlockNumber = await web3.eth.getBlockNumber()
         console.log(`Current block number: ${currentBlockNumber}`)
@@ -22,9 +26,13 @@ module.exports = async function main(callback) {
             // get each transaction in a block
             for (let i = 0; i < nTx; i++) {
                 let tx = await web3.eth.getTransactionFromBlock(block, i)
-                // console.log(tx)
+                // console.log(`getTransactionFromBlock(${block},${i}): ${JSON.stringify(tx)}`)
                 let txReceipt = await web3.eth.getTransactionReceipt(tx.hash)
                 // console.log(txReceipt)
+                if (txReceipt.logs.length == 0) {
+                    console.log(`getTransactionReceipt(${tx.hash}).logs is empty!\ntxReceipt:`)
+                    console.log(txReceipt)
+                }
                 for (log of txReceipt.logs) {
                     for (f of Contract.abi) {
                         if (log.topics[0] === f.signature) {  // match `topics' against abi
