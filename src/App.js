@@ -31,7 +31,7 @@ const App = () => {
     }).catch(error => {
       console.error(error)
     })
-  }, [])
+  }, [])  // run once - as in ComponentDidMount()
 
   React.useEffect(() => {
     if (simpleStorageInstance) {
@@ -53,7 +53,7 @@ const App = () => {
         setEventHistory(history)
       })
     }
-  }, [simpleStorageInstance, storedData])
+  }, [simpleStorageInstance, storedData])  // runs if changes made to these *dependencies*
 
   const addToSimpleStorage = async (value) => {
     if (simpleStorageInstance && accounts) {
@@ -79,49 +79,48 @@ const App = () => {
     }
   }
 
-
   if (!web3) {
     return <div>Loading Web3, accounts, and contract...</div>;
-  }
-
-  return (
-    <Container>
-      <h2 className="d-flex justify-content-center">Smart Contract Example</h2>
-      <Provider network={network} />
-      <Metamask ethereum={window.ethereum} />
-      <Account accounts={accounts} />
-      <ContractAddress contractInstance={simpleStorageInstance} />
-      <div className="d-flex justify-content-center mt-4">
-        <h4>Current stored data: <span className="h3 text-success font-weight-bolder">{storedData}</span></h4>
-      </div>
-      <div className="d-flex justify-content-center">
-        <Form inline>
-          <Form.Label className="my-1 mr-2" htmlFor="inlineFormCustomSelectPref">New stored data</Form.Label>
-          <Form.Control className="my-1 mr-sm-2" id="storageAmountInput" type="number" step="1" min="0"></Form.Control>
-          <Button id="changeButton" variant="primary" onClick={(event) => {
-            if (event.target.key === 'Enter') {
-              event.preventDefault();
-            }
-            // disable the button until we're done
-            event.target.value = "Changing..."
-            event.target.disabled = true
-            let newValue = parseInt(document.getElementById("storageAmountInput").value)
-            if (newValue >= 0)
-              addToSimpleStorage(newValue)
-            document.getElementById("storageAmountInput").value = ""
-            document.getElementById("changeButton").value = "Change"
-            document.getElementById("changeButton").disabled = false
-          }}
-          >Change
+  } else {
+    return (
+      <Container>
+        <h2 className="d-flex justify-content-center">Smart Contract Example</h2>
+        <Provider network={network} />
+        <Metamask ethereum={window.ethereum} />
+        <Account accounts={accounts} />
+        <ContractAddress contractInstance={simpleStorageInstance} />
+        <div className="d-flex justify-content-center mt-4">
+          <h4>Current stored data: <span className="h3 text-success font-weight-bolder">{storedData}</span></h4>
+        </div>
+        <div className="d-flex justify-content-center">
+          <Form inline>
+            <Form.Label className="my-1 mr-2" htmlFor="inlineFormCustomSelectPref">New stored data</Form.Label>
+            <Form.Control className="my-1 mr-sm-2" id="storageAmountInput" type="number" step="1" min="0"></Form.Control>
+            <Button id="changeButton" variant="primary" onClick={(event) => {
+              if (event.target.key === 'Enter') {
+                event.preventDefault();
+              }
+              // disable the button until we're done
+              event.target.value = "Changing..."
+              event.target.disabled = true
+              let newValue = parseInt(document.getElementById("storageAmountInput").value)
+              if (newValue >= 0)
+                addToSimpleStorage(newValue)
+              document.getElementById("storageAmountInput").value = ""
+              document.getElementById("changeButton").value = "Change"
+              document.getElementById("changeButton").disabled = false
+            }}
+            >Change
             </Button>
-        </Form>
-      </div>
-      <br></br>
-      <div className="d-flex flex-row justify-content-center">
-        <EventHistory className="d-flex" events={eventHistory} />
-      </div>
-    </Container>
-  );
+          </Form>
+        </div>
+        <br></br>
+        <div className="d-flex flex-row justify-content-center">
+          <EventHistory className="d-flex" events={eventHistory} />
+        </div>
+      </Container>
+    )
+  }
 }
 
 const EventHistory = (props) => {
