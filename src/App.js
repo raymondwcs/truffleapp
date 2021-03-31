@@ -1,263 +1,201 @@
 import React from 'react';
-// import ReactDOM from 'react-dom';
 import 'bootstrap/dist/css/bootstrap.css';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Table from 'react-bootstrap/Table';
 import Container from 'react-bootstrap/Container';
-
-// import logo from './logo.svg';
-// import './App.css';
 import getWeb3 from "./getWeb3";
-
-// const path = require('path');
-// var SimpleStorageABI = require(path.join(__dirname, '../build/contracts/SimpleStorage'))
 import SimpleStorageContract from "./build/contracts/SimpleStorage.json";
 
-class App extends React.Component {
-  constructor(props) {
-    super(props)
+const App = () => {
+  const [storedData, setStoredData] = React.useState('?')
+  const [web3, setWeb3] = React.useState(null)
+  const [eventHistory, setEventHistory] = React.useState(null)
+  const [accounts, setAccounts] = React.useState(null)
+  const [network, setNetwork] = React.useState(null)
+  const [simpleStorageInstance, setSimpleStorageInstance] = React.useState(null)
 
-    this.state = {
-      storedData: '?',
-      web3: null,
-      eventHistory: []
-    }
-  }
-
-  componentDidMount() {
-    // Get network provider and web3 instance.
-    // See utils/getWeb3 for more info.
-
-    getWeb3
-      .then(results => {
-        this.setState({
-          web3: results.web3,
-          accounts: results.accounts,
-          network: results.network
-        })
-
-        // Instantiate contract once web3 provided.
-        this.instantiateContract()
-      })
-      .catch((error) => {
-        console.log(error)
-        alert(error.message)
-      })
-
-    if (window.ethereum) {
-      window.ethereum.on('accountsChanged', (accounts) => {
-        // Time to reload your interface with accounts[0]!
-        this.setState({ accounts: accounts })
-      });
-    }
-  }
-
-
-  instantiateContract() {
-    const contract = require('@truffle/contract')
-    const simpleStorage = contract(SimpleStorageContract)
-    simpleStorage.setProvider(this.state.web3.currentProvider)
-
-    // Declaring this for later so we can chain functions on SimpleStorage.
-    var simpleStorageInstance
-
-    simpleStorage.deployed().then(instance => {
-      simpleStorageInstance = instance
-      this.setState({ simpleStorageInstance: instance })
-      return simpleStorageInstance.storedData()
+  React.useEffect(() => {
+    getWeb3().then(results => {
+      setWeb3(results.web3)
+      setAccounts(results.accounts)
+      setNetwork(results.network)
+      return results
     }).then(results => {
-      console.log(`storedData() returns: ${results.toNumber()}`)
-      this.setState({ storedData: results.toNumber() })
-      this.updateEventHistory()
+      const contract = require('@truffle/contract')
+      const simpleStorage = contract(SimpleStorageContract)
+      simpleStorage.setProvider(results.web3.currentProvider)
+      return simpleStorage.deployed()
+    }).then(instance => {
+      setSimpleStorageInstance(instance)
     }).catch(error => {
-      alert(error.message)
+      console.error(error)
     })
-  }
+  }, [])
 
-  updateEventHistory = async () => {
-    this.state.simpleStorageInstance.getPastEvents('valueChanged', { fromBlock: 0, toBlock: 'latest' }).then(events => {
-      let history = events.map(e => {
-        return ({
-          address: e.address,
-          changedBy: e.returnValues.changedBy,
-          transactionHash: e.transactionHash,
-          oldValue: e.returnValues.oldValue,
-          newValue: e.returnValues.newValue
+  React.useEffect(() => {
+    if (simpleStorageInstance) {
+      simpleStorageInstance.storedData().then(results => {
+        setStoredData(results.toNumber())
+        return simpleStorageInstance.getPastEvents('valueChanged', { fromBlock: 0, toBlock: 'latest' })
+      }).then(events => {
+        let history = events.map(e => {
+          return {
+            address: e.address,
+            changedBy: e.returnValues.changedBy,
+            transactionHash: e.transactionHash,
+            oldValue: e.returnValues.oldValue,
+            newValue: e.returnValues.newValue
+          }
         })
+        return history
+      }).then(history => {
+        setEventHistory(history)
       })
-      this.setState({ eventHistory: history })
-    })
-  }
+    }
+  }, [simpleStorageInstance, storedData])
 
-  addToSimpleStorage = async (value) => {
-    if (this.state.simpleStorageInstance && this.state.accounts) {
+  const addToSimpleStorage = async (value) => {
+    if (simpleStorageInstance && accounts) {
       console.log(`value to be stored is = ${value}`);
-      console.log(`account: ${this.state.accounts}`)
+      console.log(`account: ${accounts}`)
 
       try {
-        let tx = await this.state.simpleStorageInstance.set(parseInt(value), { from: this.state.accounts[0] })
-        console.log(`tx receipt: ${tx}`)
-        let results = await this.state.simpleStorageInstance.storedData()
+        let tx = await simpleStorageInstance.set(parseInt(value), { from: accounts[0] })
+        console.log(`tx receipt: ${JSON.stringify(tx)}`)
+        let results = await simpleStorageInstance.storedData()
         let currentStoredData = results.toNumber()
         console.log(`addToSimpleStorage(${value}) returns ${currentStoredData}`)
         if (currentStoredData === parseInt(value)) {
-          this.setState({ storedData: value })
-          this.updateEventHistory()
-          // re-enable the change button
-          document.getElementById("changeButton").value = "Change"
-          document.getElementById("changeButton").disabled = false
+          setStoredData(value)
         } else {
           alert(`Error updating!`)
         }
       } catch (error) {
-        // re-enable the change button
-        document.getElementById("changeButton").value = "Change"
-        document.getElementById("changeButton").disabled = false
+        console.error(error)
         alert(error)
         return
       }
-    } else {
-      alert(`Please reload this page!`)
     }
   }
-  /*
-  addToSimpleStorage = (value) => {
-    if (this.state.simpleStorageInstance && this.state.accounts) {
-      console.log(`value to be stored is = ${value}`);
-      console.log(`account: ${this.state.accounts}`)
-      this.state.simpleStorageInstance.set(value, { from: this.state.accounts[0] })
-        .then((results) => {
-          return this.state.simpleStorageInstance.storedData()
-        }).then((results) => {
-          this.setState(prevState => ({
-            ...prevState,
-            storedData: results.toNumber()
-          }));
-          this.updateEventHistory()
-        }).catch((err) => {
-          console.log('error');
-          console.log(err);
-        });
-    } else {
-      this.setState(prevState => ({
-        ...prevState,
-        error: new Error('simple storage instance not loaded')
-      }))
-    }
+
+
+  if (!web3) {
+    return <div>Loading Web3, accounts, and contract...</div>;
   }
-  */
 
-  render() {
-    if (!this.state.web3) {
-      return <div>Loading Web3, accounts, and contract...</div>;
-    }
-    return (
-      <Container>
-        <h2 className="d-flex justify-content-center">Smart Contract Example</h2>
-        <Provider network={this.state.network} />
-        <Metamask ethereum={window.ethereum} />
-        <Account accounts={this.state.accounts} />
-        <ContractAddress contractInstance={this.state.simpleStorageInstance} />
-        <div className="d-flex justify-content-center mt-4">
-          <h4>Current stored data: <span className="h3 text-success font-weight-bolder">{this.state.storedData}</span></h4>
-        </div>
-        <div className="d-flex justify-content-center">
-          <Form inline>
-            <Form.Label className="my-1 mr-2" htmlFor="inlineFormCustomSelectPref">New stored data</Form.Label>
-            <Form.Control className="my-1 mr-sm-2" id="storageAmountInput" type="number" step="1" min="0"></Form.Control>
-            <Button id="changeButton" variant="primary" onClick={(event) => {
-              if (event.target.key === 'Enter') {
-                event.preventDefault();
-              }
-              // disable the button until we're done
-              event.target.value = "Changing..."
-              event.target.disabled = true
-              this.addToSimpleStorage(document.getElementById("storageAmountInput").value)
-            }}
-            >Change
-            </Button>
-          </Form>
-        </div>
-        <br></br>
-        <div className="d-flex flex-row justify-content-center">
-          <EventHistory className="d-flex" events={this.state.eventHistory} />
-        </div>
-      </Container>
-    );
-  }
-}
-
-class EventHistory extends React.Component {
-
-  render() {
-    if (this.props.events.length === 0) {
-      return < div ></div >
-    }
-    // let listItems = this.props.events.map((e) => <li key={e.transactionHash}>Value: {e.newValue} (was {e.oldValue})</li>)
-    // return <ol>{listItems}</ol>
-    let listItems = this.props.events.map((e) =>
-      <tr key={e.transactionHash}>
-        <td>{e.changedBy}</td>
-        <td className="text-success">{e.newValue}</td>
-        <td>{e.oldValue}</td>
-      </tr>
-    )
-    return (
-      <div >
-        <div className="d-flex justify-content-center">Transaction History</div>
-        <div className="d-flex justify-content-center">
-          <Table striped bordered hover size="sm">
-            <thead>
-              <tr>
-                <th className="col-auto">Modified by</th>
-                <th className="bg-success text-white col-auto">New Value</th>
-                <th className="col-auto">Old Value</th>
-              </tr>
-            </thead>
-            <tbody>
-              {listItems}
-            </tbody>
-          </Table>
-        </div>
+  return (
+    <Container>
+      <h2 className="d-flex justify-content-center">Smart Contract Example</h2>
+      <Provider network={network} />
+      <Metamask ethereum={window.ethereum} />
+      <Account accounts={accounts} />
+      <ContractAddress contractInstance={simpleStorageInstance} />
+      <div className="d-flex justify-content-center mt-4">
+        <h4>Current stored data: <span className="h3 text-success font-weight-bolder">{storedData}</span></h4>
       </div>
-    )
-  }
+      <div className="d-flex justify-content-center">
+        <Form inline>
+          <Form.Label className="my-1 mr-2" htmlFor="inlineFormCustomSelectPref">New stored data</Form.Label>
+          <Form.Control className="my-1 mr-sm-2" id="storageAmountInput" type="number" step="1" min="0"></Form.Control>
+          <Button id="changeButton" variant="primary" onClick={(event) => {
+            if (event.target.key === 'Enter') {
+              event.preventDefault();
+            }
+            // disable the button until we're done
+            event.target.value = "Changing..."
+            event.target.disabled = true
+            let newValue = parseInt(document.getElementById("storageAmountInput").value)
+            if (newValue >= 0)
+              addToSimpleStorage(newValue)
+            document.getElementById("storageAmountInput").value = ""
+            document.getElementById("changeButton").value = "Change"
+            document.getElementById("changeButton").disabled = false
+          }}
+          >Change
+            </Button>
+        </Form>
+      </div>
+      <br></br>
+      <div className="d-flex flex-row justify-content-center">
+        <EventHistory className="d-flex" events={eventHistory} />
+      </div>
+    </Container>
+  );
 }
 
-class Provider extends React.Component {
-  render() {
+const EventHistory = (props) => {
+  if (props.events === null || props.events === undefined) {
+    return < div ></div >
+  }
+  // let listItems = props.events.map((e) => <li key={e.transactionHash}>Value: {e.newValue} (was {e.oldValue})</li>)
+  // return <ol>{listItems}</ol>
+  let listItems = props.events.map((e) =>
+    <tr key={e.transactionHash}>
+      <td>{e.changedBy}</td>
+      <td className="text-success">{e.newValue}</td>
+      <td>{e.oldValue}</td>
+    </tr>
+  )
+  return (
+    <div >
+      <div className="d-flex justify-content-center">Transaction History</div>
+      <div className="d-flex justify-content-center">
+        <Table striped bordered hover size="sm">
+          <thead>
+            <tr>
+              <th className="col-auto">Modified by</th>
+              <th className="bg-success text-white col-auto">New Value</th>
+              <th className="col-auto">Old Value</th>
+            </tr>
+          </thead>
+          <tbody>
+            {listItems}
+          </tbody>
+        </Table>
+      </div>
+    </div>
+  )
+}
+
+const Provider = (props) => {
+  if (props.network) {
     return (
       <div className="d-flex justify-content-center">
-        <small>Connected to network: <code className="text-info">{this.props.network.name}</code></small>
+        <small>Connected to network: <code className="text-info">{props.network.name}</code></small>
       </div >
     )
+  } else {
+    return (<div></div>)
   }
 }
 
-class ContractAddress extends React.Component {
-  render() {
-    // console.log(this.props.contractInstance)
+const ContractAddress = (props) => {
+  if (props.contractInstance) {
     return (
-      (this.props.contractInstance !== undefined) ?
+      (props.contractInstance !== undefined && props.contractInstance !== null) ?
         <div className="d-flex justify-content-center">
-          <small>Contract address: <code className="text-info">{this.props.contractInstance.address}</code></small>
+          <small>Contract address: <code className="text-info">{props.contractInstance.address}</code></small>
         </div>
         :
         <div className="d-flex justify-content-center">
           <small className="text-danger">Contract not deployed</small>
         </div>
     )
+  } else {
+    return (<div></div>)
   }
 }
 
-class Account extends React.Component {
-  render() {
+const Account = (props) => {
+  if (props.accounts) {
     return (
       <div className="d-flex justify-content-center">
-        <small>Account: <code className="text-info">{this.props.accounts[0]}</code></small>
+        <small>Account: <code className="text-info">{props.accounts[0]}</code></small>
       </div >
     )
+  } else {
+    return (<div></div>)
   }
 }
 
@@ -273,22 +211,17 @@ const connect2MetaMask = async (event) => {
   }
 }
 
-class Metamask extends React.Component {
-  render() {
-    // if (typeof this.props.ethereum === 'undefined') {
-    //   return <div></div>
-    // }
-    return (
-      (typeof this.props.ethereum != 'undefined' && this.props.ethereum.isMetaMask) ?
-        <div className="d-flex justify-content-center">
-          <Button variant="info" onClick={connect2MetaMask}>
-            Connect to MetaMask
+const Metamask = (props) => {
+  return (
+    (typeof props.ethereum != 'undefined' && props.ethereum.isMetaMask) ?
+      <div className="d-flex justify-content-center">
+        <Button variant="info" onClick={connect2MetaMask}>
+          Connect to MetaMask
           </Button>
-        </div>
-        :
-        <div></div>
-    )
-  }
+      </div>
+      :
+      <div></div>
+  )
 }
 
 export default App;
