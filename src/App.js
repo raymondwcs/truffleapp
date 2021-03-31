@@ -45,7 +45,8 @@ const App = () => {
             changedBy: e.returnValues.changedBy,
             transactionHash: e.transactionHash,
             oldValue: e.returnValues.oldValue,
-            newValue: e.returnValues.newValue
+            newValue: e.returnValues.newValue,
+            timestamp: e.returnValues.timestamp
           }
         })
         return history
@@ -124,16 +125,17 @@ const App = () => {
 }
 
 const EventHistory = (props) => {
-  if (props.events === null || props.events === undefined) {
+  if (props.events === null || props.events === undefined || props.events.length === 0) {
     return < div ></div >
   }
   // let listItems = props.events.map((e) => <li key={e.transactionHash}>Value: {e.newValue} (was {e.oldValue})</li>)
   // return <ol>{listItems}</ol>
   let listItems = props.events.map((e) =>
     <tr key={e.transactionHash}>
-      <td>{e.changedBy}</td>
       <td className="text-success">{e.newValue}</td>
       <td>{e.oldValue}</td>
+      <td>{e.changedBy}</td>
+      <td>{new Date(e.timestamp * 1000).toLocaleString()}</td>
     </tr>
   )
   return (
@@ -143,9 +145,10 @@ const EventHistory = (props) => {
         <Table striped bordered hover size="sm">
           <thead>
             <tr>
-              <th className="col-auto">Modified by</th>
               <th className="bg-success text-white col-auto">New Value</th>
               <th className="col-auto">Old Value</th>
+              <th className="col-auto">Modified by</th>
+              <th className="col-auto">Date/Time</th>
             </tr>
           </thead>
           <tbody>
